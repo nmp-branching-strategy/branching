@@ -1,0 +1,20 @@
+name: Branchyng Strategy
+on:
+  pull_request:
+    types: [ assigned, opened, synchronize ]
+    branches:
+      - dev/*
+
+env:
+  GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    steps:
+      - uses: actions/checkout@v3
+      - name: Make changes to pull request
+        run:
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching/pulls -d '{"title":"Dev-Qa","body":"Please pull these new changes in!","head":"dev","base":"qa"}'
