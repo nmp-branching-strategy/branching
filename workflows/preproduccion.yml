@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [ assigned, opened, synchronize ]
     branches:
-      - preproduccion/*
+      - preproduccion
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
