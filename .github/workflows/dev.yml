@@ -10,33 +10,8 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
-  NEW_BRANCH: ${{ secrets.BRANCH }}
-  REPOSITORY: ${{ secrets.REPO }}
-  USER: ${{ secrets.USER }}
-  COMMIT_SHA: $(curl --request GET --silent -H "Authorization:token $GITHUB_TOKEN" https://api.github.com/repos/$USER/$REPOSITORY/commits | jq -r .[1].sha)
-
+  
 jobs:
-  createBranch:
-    runs-on: ubuntu-latest
-    environment:
-      name: dev
-    steps:
-      - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
-        with:
-          add: '.'
-          author_name: $USER
-          author_email: bgarrido@quarksoft.net
-          commit: --signoff
-          committer_name: $USER
-          committer_email: bgarrido@quarksoft.net
-          cwd: '.'
-          fetch: false
-          message: 'Update branch'
-          new_branch: dev/celula
-          pathspec_error_handling: ignore
-          pull: '--rebase --autostash ...'
-          push: false
-
   createPullRequest:
     runs-on: ubuntu-latest
     environment:
@@ -46,4 +21,4 @@ jobs:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
         run:
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Dev-Qa","body":"Please pull these new changes in!","head":"dev/celula1","base":"qa/celula1"}'
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Dev-Qa","body":"Please pull these new changes in!","head":"feat/test","base":"dev/feat"}'
