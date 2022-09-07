@@ -21,8 +21,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Create new Branch
         run:
-          curl --request POST --silent -H "Authorization:token $GITHUB_TOKEN" --data \
-              '{ "ref": "'"refs/heads/$NEW_BRANCH"'", "sha": "'"$COMMIT_SHA"'" }' https://api.github.com/repos/$USER/$REPOSITORY/git/refs
+          curl --request POST --silent -H "Authorization:token $GITHUB_TOKEN" --data '{ "ref":"'"refs/heads/$NEW_BRANCH"'", "sha":"'"$COMMIT_SHA"'" }' https://api.github.com/repos/$USER/$REPOSITORY/git/refs
 
   createPullRequest:
     runs-on: ubuntu-latest
