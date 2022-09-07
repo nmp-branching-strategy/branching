@@ -4,6 +4,7 @@ on:
     types: [ assigned, opened, synchronize ]
     branches:
       - dev/*
+      - feat/*
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
@@ -18,10 +19,21 @@ jobs:
     environment:
       name: dev
     steps:
-      - uses: actions/checkout@v3
-      - name: Create new Branch
-        run:
-          curl --request POST --silent -H "Authorization:token $GITHUB_TOKEN" --data '{ "ref":"'"refs/heads/$NEW_BRANCH"'", "sha":"'"$COMMIT_SHA"'" }' https://api.github.com/repos/$USER/$REPOSITORY/git/refs
+      - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          add: '.'
+          author_name: $USER
+          author_email: bgarrido@quarksoft.net
+          commit: --signoff
+          committer_name: $USER
+          committer_email: bgarrido@quarksoft.net
+          cwd: '.'
+          fetch: false
+          message: 'Update branch'
+          new_branch: dev/celula
+          pathspec_error_handling: ignore
+          pull: '--rebase --autostash ...'
+          push: false
 
   createPullRequest:
     runs-on: ubuntu-latest
