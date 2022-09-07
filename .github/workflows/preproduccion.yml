@@ -19,18 +19,19 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: estable/test
-          target_branch: preproduccion/test
+          from_branch: estable/celula
+          target_branch: preproduccion/celula
           github_token: ${{ github.token }}
 
   createPullRequest:
     runs-on: ubuntu-latest
     environment:
       name: preproduccion
+    needs: sync-branch
     steps:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: 
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Preproduccion-Main","body":"Please pull these awesome changes in!","head":"preproduccion/test","base":"main"}'
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Preproduccion-Main","body":"Please pull these awesome changes in!","head":"preproduccion/celula","base":"main"}'

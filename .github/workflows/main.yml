@@ -9,14 +9,29 @@ env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
   
 jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    steps:
+      - uses: actions/checkout@master
+      - name: Merge feat and dev
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: preproduccion/celula
+          target_branch: main
+          github_token: ${{ github.token }}
+
   createPullRequest:
     runs-on: ubuntu-latest
     environment:
       name: main
+    needs: sync-branch
     steps:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: 
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Main-Estable","body":"Please pull these awesome changes in!","head":"main","base":"estable/test"}'
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Main-Estable","body":"Please pull these awesome changes in!","head":"main","base":"estable/celula"}'

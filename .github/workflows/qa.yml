@@ -19,14 +19,15 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: dev/test
-          target_branch: qa/test
+          from_branch: dev/celula
+          target_branch: qa/celula
           github_token: ${{ github.token }}
 
   createPullRequest:
     runs-on: ubuntu-latest
     environment:
       name: qa
+    needs: sync-branch
     steps:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
