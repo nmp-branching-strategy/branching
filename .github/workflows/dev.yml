@@ -11,16 +11,17 @@ env:
 jobs:
   sync-branch:
     runs-on: ubuntu-latest
+    environment:
+      name: dev
     steps:
       - uses: actions/checkout@master
-
       - name: Merge feat and dev
         uses: devmasx/merge-branch@master
         with:
           type: now
           from_branch: feat/test
           target_branch: dev/test
-          github_token: $GITHUB_TOKEN
+          github_token: ${{ github.token }}
 
   createPullRequest:
     runs-on: ubuntu-latest

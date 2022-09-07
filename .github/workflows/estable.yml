@@ -9,6 +9,20 @@ env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    steps:
+      - uses: actions/checkout@master
+      - name: Merge feat and dev
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: qa/test
+          target_branch: estable/test
+          github_token: ${{ github.token }}
+
   createPullRequest:
     runs-on: ubuntu-latest
     environment:
