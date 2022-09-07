@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [ assigned, opened, synchronize ]
     branches:
-      - preproduccion
+      - preproduccion/*
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
@@ -19,4 +19,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: 
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Preproduccion-Main","body":"Please pull these awesome changes in!","head":"preproduccion","base":"main"}'
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Preproduccion-Main","body":"Please pull these awesome changes in!","head":"preproduccion/celula1","base":"main"}'
