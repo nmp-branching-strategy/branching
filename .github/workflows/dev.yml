@@ -10,11 +10,7 @@ env:
   NEW_BRANCH: ${{ secrets.BRANCH }}
   REPOSITORY: ${{ secrets.REPO }}
   USER: ${{ secrets.USER }}
-  COMMIT_SHA: $(curl \
-  --request GET \
-  --silent \
-  -H "Authorization:token $GITHUB_TOKEN" \
-  https://api.github.com/repos/$USER/$REPOSITORY/commits | jq -r .[1].sha)
+  COMMIT_SHA: $(curl --request GET --silent -H "Authorization:token $GITHUB_TOKEN" https://api.github.com/repos/$USER/$REPOSITORY/commits | jq -r .[1].sha)
 
 jobs:
   createBranch:
@@ -25,15 +21,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Create new Branch
         run:
-          curl \
-          --request POST \
-          --silent \
-          -H "Authorization:token $GITHUB_TOKEN" \
-          --data '{
+          curl --request POST --silent -H "Authorization:token $GITHUB_TOKEN" --data '{
               "ref": "'"refs/heads/$NEW_BRANCH"'",
-              "sha": "'"$COMMIT_SHA"'"
-          }' \
-          https://api.github.com/repos/$USER/$REPOSITORY/git/refs
+              "sha": "'"$COMMIT_SHA"'" }' https://api.github.com/repos/$USER/$REPOSITORY/git/refs
 
   createPullRequest:
     runs-on: ubuntu-latest
