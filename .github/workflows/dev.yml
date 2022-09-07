@@ -1,10 +1,12 @@
 name: Branchyng Strategy
 on:
+  push:
+    branches:
+      - feat/*
   pull_request:
     types: [ assigned, opened, synchronize ]
     branches:
       - dev/*
-      - feat/*
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
