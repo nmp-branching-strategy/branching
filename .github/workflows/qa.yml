@@ -1,4 +1,4 @@
-name: Branchyng Strategy
+name: Branchyng Strategy QA
 on:
   pull_request:
     types: [ assigned, opened, synchronize ]
@@ -7,15 +7,15 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
-
+  
 jobs:
   sync-branch:
     runs-on: ubuntu-latest
     environment:
-      name: dev
+      name: qa
     steps:
       - uses: actions/checkout@master
-      - name: Merge feat and dev
+      - name: Merge dev and qa
         uses: devmasx/merge-branch@master
         with:
           type: now
@@ -32,4 +32,4 @@ jobs:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
         run:
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Qa-Estable","body":"Please pull these new changes in!","head":"qa/feat","base":"estable/feat"}'
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Qa-Estable","body":"Please pull these new changes in!","head":"qa/celula","base":"estable/celula"}'

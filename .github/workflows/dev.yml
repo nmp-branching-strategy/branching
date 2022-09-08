@@ -1,4 +1,4 @@
-name: Branchyng Strategy
+name: Branchyng Strategy DEV
 on:
   pull_request:
     types: [ assigned, opened, synchronize ]

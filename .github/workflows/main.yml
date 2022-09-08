@@ -1,5 +1,5 @@
-name: Branchyng Strategy
-on: 
+name: Branchyng Strategy MAIN
+on:
   pull_request:
     types: [ assigned, opened, synchronize ]
     branches:
@@ -12,10 +12,10 @@ jobs:
   sync-branch:
     runs-on: ubuntu-latest
     environment:
-      name: dev
+      name: main
     steps:
       - uses: actions/checkout@master
-      - name: Merge feat and dev
+      - name: Merge preproduccion to main
         uses: devmasx/merge-branch@master
         with:
           type: now
@@ -31,7 +31,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        run: 
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Main-Estable","body":"Please pull these awesome changes in!","head":"main","base":"estable/celula"}'
+        run:
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Main-Estable","body":"Please pull these new changes in!","head":"main","base":"estable/celula"}'

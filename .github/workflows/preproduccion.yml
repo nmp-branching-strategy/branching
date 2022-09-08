@@ -1,5 +1,5 @@
-name: Branchyng Strategy
-on: 
+name: Branchyng Strategy PREPRODUCCION
+on:
   pull_request:
     types: [ assigned, opened, synchronize ]
     branches:
@@ -7,15 +7,15 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
-
+  
 jobs:
   sync-branch:
     runs-on: ubuntu-latest
     environment:
-      name: dev
+      name: preproduccion
     steps:
       - uses: actions/checkout@master
-      - name: Merge feat and dev
+      - name: Merge estable and preproduccion
         uses: devmasx/merge-branch@master
         with:
           type: now
@@ -31,7 +31,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        run: 
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Preproduccion-Main","body":"Please pull these awesome changes in!","head":"preproduccion/celula","base":"main"}'
+        run:
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Preproduccion-Main","body":"Please pull these new changes in!","head":"preproduccion/celula","base":"main"}'
