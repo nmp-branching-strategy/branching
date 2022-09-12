@@ -7,20 +7,21 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
+  PROYECTO: ${{ secrets.CELULA }}
   
 jobs:
   sync-branch:
     runs-on: ubuntu-latest
     environment:
-      name: qa
+      name: qa/$PROYECTO
     steps:
       - uses: actions/checkout@master
       - name: Merge dev and qa
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: dev/celula
-          target_branch: qa/celula
+          from_branch: dev/$PROYECTO
+          target_branch: qa/$PROYECTO
           github_token: ${{ github.token }}
 
   createPullRequest:
@@ -32,4 +33,4 @@ jobs:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
         run:
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Qa-Estable","body":"Please pull these new changes in!","head":"qa/celula","base":"estable/celula"}'
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Qa/$PROYECTO-Estable/$PROYECTO","body":"Please pull these new changes in!","head":"qa/$PROYECTO","base":"estable/$PROYECTO"}'

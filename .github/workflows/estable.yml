@@ -7,29 +7,30 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
+  PROYECTO: ${{ secrets.CELULA }}
   
 jobs:
   sync-branch:
     runs-on: ubuntu-latest
     environment:
-      name: estable
+      name: estable/$PROYECTO
     steps:
       - uses: actions/checkout@master
       - name: Merge qa and estable
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: qa/celula
-          target_branch: estable/celula
+          from_branch: qa/$PROYECTO
+          target_branch: estable/$PROYECTO
           github_token: ${{ github.token }}
 
   createPullRequest:
     runs-on: ubuntu-latest
     environment:
-      name: estable
+      name: estable/$PROYECTO
     needs: sync-branch
     steps:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
         run:
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Estable-Preproduccion","body":"Please pull these new changes in!","head":"estable/celula","base":"preproduccion/celula"}'
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Estable/$PROYECTO-Preproduccion/$PROYECTO","body":"Please pull these new changes in!","head":"estable/$PROYECTO","base":"preproduccion/$PROYECTO"}'

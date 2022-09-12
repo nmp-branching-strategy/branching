@@ -7,29 +7,30 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
+  PROYECTO: ${{ secrets.CELULA }}
   
 jobs:
   sync-branch:
     runs-on: ubuntu-latest
     environment:
-      name: dev
+      name: dev/$PROYECTO
     steps:
       - uses: actions/checkout@master
       - name: Merge feat and dev
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: feat/celula
-          target_branch: dev/celula
+          from_branch: feat//$PROYECTO
+          target_branch: dev//$PROYECTO
           github_token: ${{ github.token }}
 
   createPullRequest:
     runs-on: ubuntu-latest
     environment:
-      name: dev
+      name: dev/$PROYECTO
     needs: sync-branch
     steps:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
         run:
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Dev-Qa","body":"Please pull these new changes in!","head":"dev/celula","base":"qa/celula"}'
+          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Dev/$PROYECTO-Qa/$PROYECTO","body":"Please pull these new changes in!","head":"dev/$PROYECTO","base":"qa/$PROYECTO"}'
