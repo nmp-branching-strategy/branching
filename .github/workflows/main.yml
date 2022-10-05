@@ -5,32 +5,67 @@ on:
     branches:
       - main
 
+  workflow_call:
+    secrets:
+      TOKEN:
+        required: true
+
+permissions:
+  pull-requests: write
+
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
-  PROYECTO: ${{ secrets.CELULA }}
   
 jobs:
-  sync-branch:
+  Current-Branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_HEAD_REF#refs/heads/})"
+        id: extract_branch
+      - name: Echo Extract branch name
+        shell: bash
+        run: echo ${{ steps.extract_branch.outputs.branch }}
+      - name: Extract actor
+        shell: bash
+        run: echo "##[set-output name=actor;]$(echo ${GITHUB_ACTOR#refs/heads/})"
+        id: extract_actor
+      - name: Echo Extract actor name
+        shell: bash
+        run: echo ${{ steps.extract_actor.outputs.actor }}
+      - uses: jungwinter/split@v2
+        id: split
+        with:
+          msg: '${{ steps.extract_branch.outputs.branch }}'
+          separator: '/'
+    outputs: 
+      branch: ${{ steps.extract_branch.outputs.branch }}
+      proyect: ${{ steps.split.outputs._1 }}
+      actor: ${{ steps.extract_actor.outputs.branch }}
+  Sync-Branch:
     runs-on: ubuntu-latest
     environment:
-      name: main/$PROYECTO
+      name: main/${{needs.Current-Branch.outputs.proyect}}
+    needs: Current-Branch
     steps:
       - uses: actions/checkout@master
-      - name: Merge preproduccion to main
+      - name: Merge estable and preproduccion
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: preproduccion/$PROYECTO
+          from_branch: ${{needs.Current-Branch.outputs.branch}}
           target_branch: main
-          github_token: ${{ github.token }}
+          github_token: ${{ env.GITHUB_TOKEN }}
+          message: '${{needs.Current-Branch.outputs.actor}}Merge preproduccion ${{needs.Current-Branch.outputs.proyect}} and main'
 
-  createPullRequest:
+  CreatePullRequest:
     runs-on: ubuntu-latest
     environment:
-      name: main/$PROYECTO
-    needs: sync-branch
+      name: main/${{needs.Current-Branch.outputs.proyect}}
+    needs: [Current-Branch, Sync-Branch]
     steps:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
         run:
-          curl -X POST -u $GITHUB_TOKEN:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Main-Estable","body":"Please pull these new changes in!","head":"main","base":"estable/$PROYECTO"}'
+          curl -X POST -u ${{ env.GITHUB_TOKEN }}:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/branching-strategy-brian/DevOps-Workflow/pulls -d '{"title":"Main-Estable/${{needs.Current-Branch.outputs.proyect}}","body":"Please pull these new changes in!","head":"main","base":"estable/${{needs.Current-Branch.outputs.proyect}}"}'
