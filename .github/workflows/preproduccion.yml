@@ -43,22 +43,7 @@ jobs:
       branch: ${{ steps.extract_branch.outputs.branch }}
       proyect: ${{ steps.split.outputs._1 }}
       actor: ${{ steps.extract_actor.outputs.branch }}
-  Sync-Branch:
-    runs-on: ubuntu-latest
-    environment:
-      name: preproduccion/${{needs.Current-Branch.outputs.proyect}}
-    needs: Current-Branch
-    steps:
-      - uses: actions/checkout@master
-      - name: Merge estable and preproduccion
-        uses: devmasx/merge-branch@master
-        with:
-          type: now
-          from_branch: ${{needs.Current-Branch.outputs.branch}}
-          target_branch: preproduccion/${{needs.Current-Branch.outputs.proyect}}
-          github_token: ${{ env.GITHUB_TOKEN }}
-          message: '${{needs.Current-Branch.outputs.actor}}Merge estable ${{needs.Current-Branch.outputs.proyect}} and preproduccion ${{needs.Current-Branch.outputs.proyect}}'
-
+  
   CreatePullRequest:
     runs-on: ubuntu-latest
     environment:
