@@ -43,15 +43,3 @@ jobs:
       branch: ${{ steps.extract_branch.outputs.branch }}
       proyect: ${{ steps.split.outputs._1 }}
       actor: ${{ steps.extract_actor.outputs.branch }}
-  
-  CreateFork:
-    runs-on: ubuntu-latest
-    environment:
-      name: main/${{needs.Current-Branch.outputs.proyect}}
-    needs: [Current-Branch, Sync-Branch]
-    steps:
-      - uses: tgymnich/fork-sync@v1.6.3
-        with:
-          token: ${{ secrets.TOKEN }}
-          base: estable/${{needs.Current-Branch.outputs.proyect}}
-          head: main
