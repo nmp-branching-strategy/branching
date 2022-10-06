@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: preproduccion/${{needs.Current-Branch.outputs.proyect}}
-    needs: [Current-Branch, Sync-Branch]
+    needs: [Current-Branch]
     steps:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
