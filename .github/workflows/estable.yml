@@ -15,6 +15,8 @@ permissions:
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
+  OWNER: ${{ secrets.OWNER }}
+  REPO: ${{ secrets.REPO }}
   
 jobs:
   Current-Branch:
@@ -53,4 +55,4 @@ jobs:
       - uses: actions/checkout@v3
       - name: Make changes to pull request
         run:
-          curl -X POST -u ${{ env.GITHUB_TOKEN }}:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/bgarrido2314/branching-strategy/pulls -d '{"title":"Estable/${{needs.Current-Branch.outputs.proyect}}-Preproduccion/${{needs.Current-Branch.outputs.proyect}}","body":"Please pull these new changes in!","head":"estable/${{needs.Current-Branch.outputs.proyect}}","base":"preproduccion/${{needs.Current-Branch.outputs.proyect}}"}'
+          curl -X POST -u ${{ env.GITHUB_TOKEN }}:x-oauth-basic -H "Accept:application/vnd.github+json" https://api.github.com/repos/${{ env.OWNER }}/${{ env.REPO }}/pulls -d '{"title":"Estable/${{needs.Current-Branch.outputs.proyect}}-Preproduccion/${{needs.Current-Branch.outputs.proyect}}","body":"Please pull these new changes in!","head":"estable/${{needs.Current-Branch.outputs.proyect}}","base":"preproduccion/${{needs.Current-Branch.outputs.proyect}}"}'
